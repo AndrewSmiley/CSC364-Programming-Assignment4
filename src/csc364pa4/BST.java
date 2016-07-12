@@ -1,5 +1,8 @@
 package csc364pa4;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -96,20 +99,43 @@ public class BST<E extends Comparable<E>> implements Tree<E> {
 
     @Override /** Inorder traversal from the root */
     public void inorder() {
+
         inorder(root);
+
+
+    }
+    public ArrayList<E> inorder(ArrayList<E> contents) {
+        inorder(root,contents);
+        return contents;
+
     }
 
-    /** Inorder traversal from a subtree */
     protected void inorder(TreeNode<E> root) {
+
         if (root == null) return;
         inorder(root.left);
         System.out.print(root.element + " ");
+
         inorder(root.right);
+    }
+
+    /** Inorder traversal from a subtree */
+    protected void inorder(TreeNode<E> root, ArrayList<E> list) {
+
+        if (root == null) return;
+        inorder(root.left, list);
+        System.out.print(root.element + " ");
+        list.add(root.element);
+        inorder(root.right,list);
     }
 
     @Override /** Postorder traversal from the root */
     public void postorder() {
         postorder(root);
+    }
+    public ArrayList<E> postorder(ArrayList<E>  contents) {
+        postorder(root,contents);
+        return contents;
     }
 
     /** Postorder traversal from a subtree */
@@ -120,9 +146,24 @@ public class BST<E extends Comparable<E>> implements Tree<E> {
         System.out.print(root.element + " ");
     }
 
+    /** Postorder traversal from a subtree */
+    protected void postorder(TreeNode<E> root, ArrayList<E> contents) {
+        if (root == null) return;
+        postorder(root.left);
+        postorder(root.right);
+        System.out.print(root.element + " ");
+        contents.add(root.element);
+    }
+
     @Override /** Preorder traversal from the root */
     public void preorder() {
         preorder(root);
+    }
+
+    public ArrayList<E> preorder(ArrayList<E> contents) {
+        preorder(root,contents);
+        return contents;
+
     }
 
     /** Preorder traversal from a subtree */
@@ -132,6 +173,50 @@ public class BST<E extends Comparable<E>> implements Tree<E> {
         preorder(root.left);
         preorder(root.right);
     }
+    protected void preorder(TreeNode<E> root,ArrayList<E> contents) {
+        if (root == null) return;
+        System.out.print(root.element + " ");
+
+        preorder(root.left);
+        preorder(root.right);
+        contents.add(root.element);
+    }
+
+    protected ArrayList<E> breadthFirst(ArrayList<E> contents){
+        contents.add(root.element);
+        breadthFirst(root, contents);
+
+        return contents;
+    }
+    protected void breadthFirst(TreeNode<E> root, ArrayList<E> contents){
+        if(root==null) return;
+        if(root.left != null){
+            contents.add(root.left.element);
+        }
+        if(root.right !=null) {
+            contents.add(root.right.element);
+        }
+        breadthFirst(root.left, contents);
+        breadthFirst(root.right, contents);
+//        contents.add(root.left.element);
+//        contents.add(root.right.element);
+    }
+
+    protected Integer height(){
+        Integer lheight = -1;
+
+        lheight = height(root, lheight);
+        return lheight;
+
+    }
+    protected int height(TreeNode<E> root, Integer l ){
+        if(root == null) return l;
+        System.out.println("Recursing: "+l.toString());
+        return Math.max(height(root.left,l++),height(root.right,l++));
+
+
+    }
+
 
     /** This inner class is static, because it does not access
      any instance members defined in its outer class */

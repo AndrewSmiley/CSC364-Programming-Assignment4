@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
+import java.util.ArrayList;
 import java.util.TreeSet;
 
 public class BSTAnimation extends Application {
@@ -38,7 +39,7 @@ public class BSTAnimation extends Application {
         Button btHeight = new Button("Height");
         HBox hBox = new HBox(5);
         hBox.getChildren().addAll(new Label("Enter a key: "),
-                tfKey, btInsert, btDelete, btSearch,btPreorder,btPostorder,btBreadthFirst,btHeight);
+                tfKey, btInsert, btDelete, btSearch,btInOrder,btPreorder,btPostorder,btBreadthFirst,btHeight);
         hBox.setAlignment(Pos.CENTER);
         pane.setBottom(hBox);
 
@@ -57,7 +58,7 @@ public class BSTAnimation extends Application {
 
         btDelete.setOnAction(e -> {
             int key = Integer.parseInt(tfKey.getText());
-            if (!tree.search(key)) { // key is not in the tree
+            if (!tree.search(key)) { // key is not in the tree1
                 view.displayTree();
                 view.setStatus(key + " is not in the tree");
             }
@@ -67,17 +68,72 @@ public class BSTAnimation extends Application {
                 view.setStatus(key + " is deleted from the tree");
             }
         });
-        btSearch.setOnAction(e->{
-            int key = Integer.parseInt(tfKey.getText());
-            TreeSet<Integer> trace = tree.searchTrace(key);
-            if(trace.size() ==1){
-                view.displayTree();
-                view.setStatus(key + " is not in the tree");
+        btSearch.setOnAction(e-> {
+                    int key = Integer.parseInt(tfKey.getText());
+                    TreeSet<Integer> trace = tree.searchTrace(key);
+                    if (trace.size() == 1) {
+                        view.displayTree();
+                        view.setStatus(key + " is not in the tree");
+                    }
+                    if (trace.size() > 1) {
+                        view.displayTreeColors(trace);
+                        view.setStatus(key + " found in tree");
+                    }
+                });
+        btInOrder.setOnAction(e->{
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("[");
+            for (Integer i : tree.inorder(new ArrayList<Integer>())){
+                stringBuilder.append(i.toString()+",");
+
             }
-            if (trace.size() > 1){
-                view.displayTreeColors(trace);
-                view.setStatus(key + " found in tree");
+            stringBuilder.replace(stringBuilder.length()-1, stringBuilder.length(), "");
+            stringBuilder.append("]");
+            view.displayTree();
+            view.setStatus("Inorder Traversal: "+stringBuilder.toString());
+        });
+        btPreorder.setOnAction(e->{
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("[");
+            for (Integer i : tree.preorder(new ArrayList<Integer>())){
+                stringBuilder.append(i.toString()+",");
+
             }
+            stringBuilder.replace(stringBuilder.length()-1, stringBuilder.length(), "");
+            stringBuilder.append("]");
+            view.displayTree();
+            view.setStatus("Pre-order Traversal: "+stringBuilder.toString());
+        });
+        btPostorder.setOnAction(e->{
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("[");
+            for (Integer i : tree.postorder(new ArrayList<Integer>())){
+                stringBuilder.append(i.toString()+",");
+
+            }
+            stringBuilder.replace(stringBuilder.length()-1, stringBuilder.length(), "");
+            stringBuilder.append("]");
+            view.displayTree();
+            view.setStatus("Post-order Traversal: "+stringBuilder.toString());
+
+        });
+        btBreadthFirst.setOnAction(e->{
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("[");
+            for (Integer i : tree.breadthFirst(new ArrayList<Integer>())){
+                stringBuilder.append(i.toString()+",");
+
+            }
+            stringBuilder.replace(stringBuilder.length()-1, stringBuilder.length(), "");
+            stringBuilder.append("]");
+            view.displayTree();
+            view.setStatus("Breadth-First Traversal: "+stringBuilder.toString());
+
+        });
+        btHeight.setOnAction(e->{
+            view.displayTree();
+            view.setStatus("Height: "+ tree.height());
+        });
 //            public boolean search(E element) {
 //                TreeNode<E> current = root; // Start from the root
 //                while (current != null)
@@ -93,8 +149,6 @@ public class BSTAnimation extends Application {
 //            }
 
 
-
-        });
 
         // Create a scene and place the pane in the stage
         Scene scene = new Scene(pane, 450, 250);
