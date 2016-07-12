@@ -71,11 +71,11 @@ public class BSTAnimation extends Application {
         btSearch.setOnAction(e-> {
                     int key = Integer.parseInt(tfKey.getText());
                     TreeSet<Integer> trace = tree.searchTrace(key);
-                    if (trace.size() == 1) {
-                        view.displayTree();
+                    if (!trace.contains(key)) {
+                        view.displayTreeColors(trace);
                         view.setStatus(key + " is not in the tree");
                     }
-                    if (trace.size() > 1) {
+                    if (trace.contains(key)) {
                         view.displayTreeColors(trace);
                         view.setStatus(key + " found in tree");
                     }

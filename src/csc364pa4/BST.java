@@ -45,20 +45,21 @@ public class BST<E extends Comparable<E>> implements Tree<E> {
         set.add(root.element);
         while (current != null) {
             if (e.compareTo(current.element) < 0) {
-                current = current.left;
                 set.add(current.element);
+                current = current.left;
+
 
             }
             else if (e.compareTo(current.element) > 0) {
-                current = current.right;
                 set.add(current.element);
+                current = current.right;
             }
             else { // element matches current.element
                 set.add(e);
                 return set; // Element is found
             }
         }
-        return new TreeSet<E>();
+        return set;
     }
     @Override /** Insert element o into the binary tree
      * Return true if the element is inserted successfully */
@@ -149,8 +150,8 @@ public class BST<E extends Comparable<E>> implements Tree<E> {
     /** Postorder traversal from a subtree */
     protected void postorder(TreeNode<E> root, ArrayList<E> contents) {
         if (root == null) return;
-        postorder(root.left);
-        postorder(root.right);
+        postorder(root.left,contents);
+        postorder(root.right,contents);
         System.out.print(root.element + " ");
         contents.add(root.element);
     }
@@ -175,11 +176,11 @@ public class BST<E extends Comparable<E>> implements Tree<E> {
     }
     protected void preorder(TreeNode<E> root,ArrayList<E> contents) {
         if (root == null) return;
-        System.out.print(root.element + " ");
-
-        preorder(root.left);
-        preorder(root.right);
         contents.add(root.element);
+        System.out.print(root.element + " ");
+        preorder(root.left,contents);
+        preorder(root.right, contents);
+
     }
 
     protected ArrayList<E> breadthFirst(ArrayList<E> contents){
